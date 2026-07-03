@@ -1,33 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# API Integration Hub
 
-## Getting Started
+Portfolio project for Jazhem Hamid. API Integration Hub is a polished
+developer-tool dashboard that demonstrates full-stack API work with Next.js
+App Router, TypeScript, Tailwind CSS, Route Handlers, and Zod validation.
 
-First, run the development server:
+## Features
+
+- Dark responsive API console UI with summary cards, health status, request log,
+  and JSON response previews.
+- GitHub profile lookup through a server-side route handler using the public
+  GitHub REST API.
+- Weather lookup through Open-Meteo with city geocoding or latitude/longitude
+  coordinates.
+- Internal CRM mock APIs for clients and tasks with in-memory data.
+- Contact form API with Zod-validated request bodies.
+- Webhook receiver with strict payload validation and last-event memory preview.
+- Consistent JSON success/error envelopes across local API routes.
+
+## Tech Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Route Handlers
+- Zod
+- Public REST APIs: GitHub and Open-Meteo
+
+## API Routes
+
+| Route | Method | Purpose |
+| --- | --- | --- |
+| `/api/health` | `GET` | Returns dashboard service health data. |
+| `/api/github/[username]` | `GET` | Fetches GitHub profile and recent repo highlights. |
+| `/api/weather?city=New York` | `GET` | Fetches geocoded Open-Meteo weather by city. |
+| `/api/weather?lat=40.7128&lon=-74.0060` | `GET` | Fetches Open-Meteo weather by coordinates. |
+| `/api/clients` | `GET` | Returns mock CRM clients. |
+| `/api/clients` | `POST` | Creates a mock client with Zod validation. |
+| `/api/tasks` | `GET` | Returns mock CRM tasks. |
+| `/api/tasks` | `POST` | Creates a mock task with Zod validation. |
+| `/api/contact` | `POST` | Validates contact form submissions. |
+| `/api/webhook` | `GET` | Returns the last received webhook in this runtime. |
+| `/api/webhook` | `POST` | Validates and stores a webhook payload in memory. |
+
+## Local Setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Phase 1 does not require API keys. Copy `.env.example` to `.env.local` only when
+future integrations need secrets.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Validation Examples
 
-## Learn More
+Create a client:
 
-To learn more about Next.js, take a look at the following resources:
+```json
+{
+  "name": "Jordan Lee",
+  "company": "Circuit Works",
+  "email": "jordan@circuitworks.example",
+  "status": "prospect",
+  "source": "Dashboard form"
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a task:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```json
+{
+  "title": "Qualify webhook lead",
+  "owner": "Jazhem",
+  "status": "open",
+  "priority": "medium",
+  "dueDate": "2026-07-12"
+}
+```
+
+Webhook payload:
+
+```json
+{
+  "event": "client.created",
+  "source": "portfolio-demo",
+  "occurredAt": "2026-07-02T17:00:00.000Z",
+  "data": {
+    "clientId": "client_1002",
+    "plan": "growth",
+    "seats": 4
+  }
+}
+```
+
+## Quality Checks
+
+```bash
+npm run lint
+npm run build
+```
+
+## Future Improvements
+
+- Add persisted database storage for CRM records and webhook events.
+- Add optional authenticated GitHub requests for higher rate limits.
+- Add email delivery for validated contact submissions.
+- Add API request analytics and filtering.
+- Add automated route handler tests for validation and error responses.
 
 ## Deploy on Vercel
 
